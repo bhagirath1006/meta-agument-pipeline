@@ -7,8 +7,7 @@ This is a **clean and simple** Terraform project for AWS infrastructure.
 ✅ All 4 Meta-Arguments (count, for_each, depends_on, lifecycle)  
 ✅ 4 Modules (VPC, Security Groups, EC2, S3)  
 ✅ AWS Services (VPC, EC2, S3, IAM, CloudWatch)  
-✅ GitHub Actions CI/CD  
-✅ Environment Support (dev, uat, preprod, prod)  
+✅ GitHub Actions CI/CD   
 ✅ Terraform Best Practices  
 
 ## Essential Files Only

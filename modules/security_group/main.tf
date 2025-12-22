@@ -13,32 +13,17 @@ resource "aws_security_group" "main" {
   }
 }
 
-# Dynamic ingress rules using for_each and dynamic blocks
-# This demonstrates using Terraform functions
-resource "aws_security_group_rule" "ingress" {
-  for_each = {
-    for sg_key, sg_value in var.security_groups : sg_key => sg_value.ingress...
-  }
-
-  type              = "ingress"
-  from_port         = each.value.from_port
-  to_port           = each.value.to_port
-  protocol          = each.value.protocol
-  cidr_blocks       = each.value.cidr_blocks
-  security_group_id = aws_security_group.main[split(".", each.key)[0]].id
-}
-
-# Flatten approach for more complex ingress rules
+# Ingress rules - Flatten approach for handling multiple rules
 resource "aws_security_group_rule" "ingress_flattened" {
   for_each = {
     for rule in flatten([
       for sg_key, sg_value in var.security_groups : [
         for idx, rule in sg_value.ingress : {
-          sg_key    = sg_key
-          idx       = idx
-          protocol  = rule.protocol
-          from_port = rule.from_port
-          to_port   = rule.to_port
+          sg_key      = sg_key
+          idx         = idx
+          protocol    = rule.protocol
+          from_port   = rule.from_port
+          to_port     = rule.to_port
           cidr_blocks = rule.cidr_blocks
         }
       ]

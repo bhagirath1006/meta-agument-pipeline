@@ -34,7 +34,7 @@ module "ec2" {
   instance_count     = var.ec2_instance_count
   instance_type      = "t3.micro"
   subnet_ids         = module.vpc[0].subnet_ids
-  security_group_ids = [for key in keys(module.security_group) : module.security_group[key].security_group_ids[key]]
+  security_group_ids = [for key, sg in module.security_group : sg.security_group_ids[key]]
   project_name       = var.project_name
   environment        = var.environment
 

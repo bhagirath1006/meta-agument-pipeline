@@ -42,8 +42,7 @@ terraform apply
 
 Edit `terraform.tfvars`:
 
-```hcl
-environment      = "dev"        # dev, uat, preprod, prod
+
 project_name     = "myproject"
 vpc_count        = 1
 ec2_instance_count = 1
@@ -89,7 +88,6 @@ Set `AWS_ROLE_ARN` secret in GitHub for AWS access.
 - AWS credentials required (via GitHub Actions secrets or local AWS CLI config)
 - Creates real AWS resources - monitor costs
 - State file stored locally (enable remote state in provider.tf)
-- Supports dev, uat, preprod, prod environments
 
 ## Resources Created
 

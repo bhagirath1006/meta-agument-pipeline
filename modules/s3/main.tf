@@ -113,7 +113,7 @@ resource "aws_s3_bucket_policy" "main" {
         Principal = {
           AWS = "*"
         }
-        Action   = "s3:*"
+        Action = "s3:*"
         Resource = [
           each.value.arn,
           "${each.value.arn}/*"
@@ -162,7 +162,7 @@ resource "aws_cloudwatch_metric_alarm" "bucket_size" {
   threshold           = 1073741824 # 1GB
 
   dimensions = {
-    BucketName = each.value.id
+    BucketName  = each.value.id
     StorageType = "StandardStorage"
   }
 

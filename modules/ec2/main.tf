@@ -19,11 +19,11 @@ data "aws_ami" "amazon_linux_2" {
 # This ensures resources are created in the correct order
 
 resource "aws_instance" "main" {
-  count              = var.instance_count
-  ami                = data.aws_ami.amazon_linux_2.id
-  instance_type      = var.instance_type
-  subnet_id          = var.subnet_ids[count.index % length(var.subnet_ids)]
-  security_groups    = var.security_group_ids
+  count                = var.instance_count
+  ami                  = data.aws_ami.amazon_linux_2.id
+  instance_type        = var.instance_type
+  subnet_id            = var.subnet_ids[count.index % length(var.subnet_ids)]
+  security_groups      = var.security_group_ids
   iam_instance_profile = aws_iam_instance_profile.main.name
 
   # META-ARGUMENT: depends_on
