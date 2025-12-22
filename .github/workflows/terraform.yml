@@ -24,15 +24,9 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-        continue-on-error: true
       - uses: hashicorp/setup-terraform@v2
-      - run: terraform init
-      - run: terraform plan -var="project_name=meta-arguments" -var="environment=dev" -var="aws_region=us-east-1" -var="vpc_count=1" -var="ec2_instance_count=1" -var='security_groups={"app":{"description":"Application security group","ingress":[{"protocol":"tcp","from_port":80,"to_port":80,"cidr_blocks":["0.0.0.0/0"]},{"protocol":"tcp","from_port":443,"to_port":443,"cidr_blocks":["0.0.0.0/0"]}]},"database":{"description":"Database security group","ingress":[{"protocol":"tcp","from_port":5432,"to_port":5432,"cidr_blocks":["10.0.0.0/8"]}]}}' -var='s3_buckets={"logs":{"versioning":true},"backups":{"versioning":true}}' -input=false -out=tfplan
+      - run: terraform init -backend=false
+      - run: terraform plan -var="project_name=meta-arguments" -var="environment=dev" -var="aws_region=us-east-1" -var="vpc_count=1" -var="ec2_instance_count=1" -var='security_groups={"app":{"description":"Application security group","ingress":[{"protocol":"tcp","from_port":80,"to_port":80,"cidr_blocks":["0.0.0.0/0"]},{"protocol":"tcp","from_port":443,"to_port":443,"cidr_blocks":["0.0.0.0/0"]}]},"database":{"description":"Database security group","ingress":[{"protocol":"tcp","from_port":5432,"to_port":5432,"cidr_blocks":["10.0.0.0/8"]}]}}' -var='s3_buckets={"logs":{"versioning":true},"backups":{"versioning":true}}' -input=false
       - uses: actions/upload-artifact@v3
         with:
           name: tfplan
@@ -50,7 +44,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-        continue-on-error: true
       - uses: hashicorp/setup-terraform@v2
       - run: terraform init
       - run: terraform plan -var="project_name=meta-arguments" -var="environment=prod" -var="aws_region=us-east-1" -var="vpc_count=1" -var="ec2_instance_count=1" -var='security_groups={"app":{"description":"Application security group","ingress":[{"protocol":"tcp","from_port":80,"to_port":80,"cidr_blocks":["0.0.0.0/0"]},{"protocol":"tcp","from_port":443,"to_port":443,"cidr_blocks":["0.0.0.0/0"]}]},"database":{"description":"Database security group","ingress":[{"protocol":"tcp","from_port":5432,"to_port":5432,"cidr_blocks":["10.0.0.0/8"]}]}}' -var='s3_buckets={"logs":{"versioning":true},"backups":{"versioning":true}}' -input=false -out=tfplan
