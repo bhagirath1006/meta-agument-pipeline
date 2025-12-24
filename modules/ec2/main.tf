@@ -35,7 +35,7 @@ resource "aws_instance" "main" {
   # User data script
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
     instance_index = count.index + 1
-    environment    = var.environment
+    project_name   = var.project_name
   }))
 
   # META-ARGUMENT: lifecycle
@@ -53,7 +53,7 @@ resource "aws_instance" "main" {
 
 # IAM role for EC2 instances (demonstrating dependency)
 resource "aws_iam_role" "main" {
-  name = "${var.project_name}-ec2-role"
+  name = "${var.project_name}-ec2"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

@@ -7,7 +7,7 @@ variable "instance_count" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.micro"
+  default     = "t2.micro"
 }
 
 variable "subnet_ids" {
@@ -22,10 +22,5 @@ variable "security_group_ids" {
 
 variable "project_name" {
   description = "Project name"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment"
   type        = string
 }
