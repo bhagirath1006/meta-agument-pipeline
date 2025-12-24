@@ -35,6 +35,7 @@ resource "aws_instance" "main" {
   # User data script
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
     instance_index = count.index + 1
+    environment    = var.environment
     project_name   = var.project_name
   }))
 
@@ -79,29 +80,4 @@ resource "aws_iam_instance_profile" "main" {
   role = aws_iam_role.main.name
 }
 
-# Attach policy for SSM access
-resource "aws_iam_role_policy_attachment" "ssm_access" {
-  role       = aws_iam_role.main.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
 
-# CloudWatch monitoring
-resource "aws_cloudwatch_metric_alarm" "cpu_utilization" {
-  count               = var.instance_count
-  alarm_name          = "${var.project_name}-cpu-alarm-${count.index + 1}"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "80"
-
-  dimensions = {
-    InstanceId = aws_instance.main[count.index].id
-  }
-
-  depends_on = [
-    aws_instance.main
-  ]
-}
